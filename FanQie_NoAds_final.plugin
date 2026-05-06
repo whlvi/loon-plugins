@@ -1,0 +1,30 @@
+#!name=番茄小说去广告完全版
+#!desc=去除番茄小说全部广告：开屏、Banner、阅读章节插入广告、激励视频、Feed广告
+#!author=Custom
+#!tag=去广告
+
+[Rule]
+DOMAIN-SUFFIX,pangolin.snssdk.com,REJECT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT
+DOMAIN-SUFFIX,adi.snssdk.com,REJECT
+DOMAIN-SUFFIX,ad.toutiao.com,REJECT
+DOMAIN-SUFFIX,ad.oceanengine.com,REJECT
+DOMAIN-SUFFIX,mssdk-boe.byted.org,REJECT
+DOMAIN-SUFFIX,log.snssdk.com,REJECT
+DOMAIN-SUFFIX,applog.snssdk.com,REJECT
+
+[Rewrite]
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/app/ad/splash url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/reward url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/reading/reader/ad/reward url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/free/unlock url reject-dict
+
+[Script]
+http-response ^https?://(novel\.snssdk\.com/api/novel/book/reader/full|[^/]+\.fqnovel\.com/reading/reader/full) script-path=https://raw.githubusercontent.com/whlvi/loon-plugins/main/FanQie_all_in_one.js,requires-body=true,timeout=15,tag=番茄_章节去广告
+http-response ^https?://(novel\.snssdk\.com/api/novel/book/catalog|[^/]+\.fqnovel\.com/reading/catalog) script-path=https://raw.githubusercontent.com/whlvi/loon-plugins/main/FanQie_all_in_one.js,requires-body=true,timeout=10,tag=番茄_目录去广告
+http-response ^https?://(novel\.snssdk\.com/api/novel/feed|[^/]+\.fqnovel\.com/reading/home/feed) script-path=https://raw.githubusercontent.com/whlvi/loon-plugins/main/FanQie_all_in_one.js,requires-body=true,timeout=10,tag=番茄_Feed去广告
+http-response ^https?://(novel\.snssdk\.com/api/novel/reader/config|[^/]+\.fqnovel\.com/reading/reader/config) script-path=https://raw.githubusercontent.com/whlvi/loon-plugins/main/FanQie_all_in_one.js,requires-body=true,timeout=10,tag=番茄_Config去广告
+
+[MITM]
+hostname = novel.snssdk.com, *.fqnovel.com
