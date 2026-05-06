@@ -1,11 +1,10 @@
 /**
- * 番茄小说去广告 — 合并版
- * 通过请求 URL 自动判断场景，一个脚本处理所有接口
+ * 番茄小说去广告 — 合并版 v2
+ * 新增：翻页插屏广告相关标志位清除
  */
 
 const url = $request.url || "";
 
-// ── 广告判断工具 ────────────────────────────────────────
 const AD_TYPES = new Set([5, 6, 9, 10, 100]);
 const AD_KEYS  = ['ad_id', 'ad_info', 'adData', 'ad_source', 'advert'];
 
@@ -19,7 +18,9 @@ function isAdItem(i) {
 
 function deepClean(o) {
   const DROP = ['ad_config','ad_list','ad_info','ad_insert_list','insert_ads',
-                'splash_ads','banner_ads','float_ads','ad_items'];
+                'splash_ads','banner_ads','float_ads','ad_items',
+                'insert_ad_config','page_ad_config','chapter_ad_config',
+                'interstitial_ad','full_screen_ad','reward_ad_config'];
   if (Array.isArray(o)) return o.filter(i => !isAdItem(i)).map(deepClean);
   if (o && typeof o === 'object') {
     const r = {};
@@ -32,19 +33,27 @@ function deepClean(o) {
   return o;
 }
 
+// 关闭所有广告开关（覆盖翻页插屏广告相关字段）
 function disableAdFlags(o) {
   if (Array.isArray(o)) { o.forEach(disableAdFlags); return; }
   if (o && typeof o === 'object') {
     for (const k of Object.keys(o)) {
-      if (/^(has_ad|show_ad|enable_ad|ad_enable|ad_switch)$/i.test(k)) {
-        o[k] = 0;
-      } else if (
-        /ad[_-]?(enable|show|switch|open|display|support|status|reward)/i.test(k) ||
-        /show[_-]?ad/i.test(k) || /enable[_-]?ad/i.test(k) ||
-        /[_-]ad$/i.test(k)  || /[_-]ads$/i.test(k)
+      if (
+        // 精确匹配常见标志位
+        /^(has_ad|show_ad|enable_ad|ad_enable|ad_switch|show_insert_ad|
+           has_insert_ad|insert_ad_enable|insert_ad_switch|
+           show_page_ad|has_page_ad|page_ad_enable|
+           show_interstitial|has_interstitial|interstitial_enable|
+           show_full_screen_ad|full_screen_ad_enable|
+           show_reward_ad|reward_ad_enable|
+           ad_open|ad_show|ad_display)$/ix.test(k) ||
+        // 模糊匹配：以 _ad / _ads 结尾
+        /[_-]ads?$/i.test(k) ||
+        // 模糊匹配：ad_ 开头的开关类
+        /^ad[_-]?(enable|show|switch|open|display|support|status|reward|insert|page|interstitial|freq|interval)/i.test(k)
       ) {
         o[k] = typeof o[k] === 'boolean' ? false : 0;
-      } else if (/ad[_-]?(list|items|data|info|config)/i.test(k)) {
+      } else if (/ad[_-]?(list|items|data|info|config|setting)/i.test(k)) {
         o[k] = Array.isArray(o[k]) ? [] : {};
       } else {
         disableAdFlags(o[k]);
@@ -69,7 +78,6 @@ function isFeedAd(i) {
   return false;
 }
 
-// ── 主逻辑 ──────────────────────────────────────────────
 let body = $response.body;
 if (!body) { $done({}); }
 
@@ -77,12 +85,10 @@ try {
   let json = JSON.parse(body);
 
   if (/reader\/full/i.test(url)) {
-    // 章节内容：深度清理 + 关闭广告标志位
     json = deepClean(json);
     disableAdFlags(json);
 
   } else if (/catalog/i.test(url)) {
-    // 章节目录：过滤广告占位条目
     function cleanCatalog(o) {
       if (Array.isArray(o)) return o.filter(i => !isCatalogAd(i)).map(cleanCatalog);
       if (o && typeof o === 'object') {
@@ -98,7 +104,6 @@ try {
     json = cleanCatalog(json);
 
   } else if (/feed/i.test(url)) {
-    // 首页 Feed 流
     function cleanFeed(o) {
       if (Array.isArray(o)) return o.filter(i => !isFeedAd(i)).map(cleanFeed);
       if (o && typeof o === 'object') {
@@ -114,7 +119,6 @@ try {
     json = cleanFeed(json);
 
   } else if (/config/i.test(url)) {
-    // 阅读器配置：关闭所有广告开关
     disableAdFlags(json);
   }
 
