@@ -1,10 +1,10 @@
 #!name=番茄小说去广告完全版
-#!desc=去除番茄小说全部广告：开屏、翻页插屏、Banner、章节内插入广告、激励视频、Feed广告
+#!desc=去除番茄小说全部广告：开屏、翻页插屏、底部Banner、章节内插入广告、激励视频、Feed广告
 #!author=Custom
 #!tag=去广告
 
 [Rule]
-# ── 穿山甲广告 SDK 全家桶 ──────────────────────────────
+# ── 穿山甲广告 SDK ───────────────────────────────────────
 DOMAIN-SUFFIX,pangolin.snssdk.com,REJECT
 DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT
 DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT
@@ -12,41 +12,41 @@ DOMAIN-SUFFIX,adi.snssdk.com,REJECT
 DOMAIN-SUFFIX,ad.toutiao.com,REJECT
 DOMAIN-SUFFIX,ad.oceanengine.com,REJECT
 DOMAIN-SUFFIX,mssdk-boe.byted.org,REJECT
-DOMAIN-SUFFIX,tobapplog.snssdk.com,REJECT
+DOMAIN-SUFFIX,frontier-aweme.snssdk.com,REJECT
+DOMAIN-KEYWORD,pangolin-sdk,REJECT
+DOMAIN-KEYWORD,pangle,REJECT
 
-# ── 穿山甲广告素材 CDN（广告图片/视频资源加载域名）──────
-DOMAIN-SUFFIX,sf3-cdn-tos.pglstatp-toutiao.com,REJECT
-DOMAIN-SUFFIX,sf1-cdn-tos.pglstatp-toutiao.com,REJECT
-DOMAIN-SUFFIX,sf6-cdn-tos.pglstatp-toutiao.com,REJECT
+# ── 番茄广告配置触发域名（请求记录精准定位）─────────────
+# mon*-misc-lf.fqnovel.com 系列（广告开关配置，高频请求）
+DOMAIN-KEYWORD,misc-lf.fqnovel,REJECT
+# frontier*-toutiao-lf.fqnovel.com（头条广告请求接口）
+DOMAIN-KEYWORD,toutiao-lf.fqnovel,REJECT
+
+# ── 插屏广告视频素材（2MB 视频就从这里来）────────────────
+DOMAIN-SUFFIX,fqnovelvod.com,REJECT
+
+# ── 广告曝光上报（含 QUIC）──────────────────────────────
+DOMAIN-KEYWORD,applog-lf.fqnovel,REJECT
+DOMAIN-KEYWORD,rtlog,REJECT
+
+# ── 穿山甲广告素材 CDN ────────────────────────────────────
+DOMAIN-KEYWORD,pglstatp-toutiao,REJECT
 DOMAIN-SUFFIX,p3-ad.byteimg.com,REJECT
 DOMAIN-SUFFIX,p6-ad.byteimg.com,REJECT
 DOMAIN-SUFFIX,p9-ad.byteimg.com,REJECT
 DOMAIN-SUFFIX,p1-ad.byteimg.com,REJECT
-DOMAIN-SUFFIX,lf3-cdn-tos.bytescm.com,REJECT
-DOMAIN-SUFFIX,lf6-cdn-tos.bytescm.com,REJECT
-
-# ── 穿山甲广告竞价/请求接口 ──────────────────────────────
-DOMAIN-SUFFIX,alog.toutiao.com,REJECT
-DOMAIN-SUFFIX,log.snssdk.com,REJECT
-DOMAIN-SUFFIX,applog.snssdk.com,REJECT
-DOMAIN-SUFFIX,mon.snssdk.com,REJECT
-
-# ── 关键词兜底（穿山甲所有子域名）───────────────────────
-DOMAIN-KEYWORD,pglstatp-toutiao,REJECT
-DOMAIN-KEYWORD,pangolin-sdk,REJECT
 
 [Rewrite]
 # 开屏广告
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/app/ad/splash url reject-dict
-
-# 翻页插屏广告（所有可能的命名）
+# 所有广告接口
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/ url reject-dict
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/reading/reader/ad url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/reader/ad url reject-dict
-
 # 激励视频 / 免费解锁
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/reward url reject-dict
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/free/unlock url reject-dict
+# Banner 广告
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/reader/banner url reject-dict
 
 [Script]
 http-response ^https?://(novel\.snssdk\.com/api/novel/book/reader/full|[^/]+\.fqnovel\.com/reading/reader/full) script-path=https://raw.githubusercontent.com/whlvi/loon-plugins/main/FanQie_all_in_one.js,requires-body=true,timeout=15,tag=番茄_章节去广告
