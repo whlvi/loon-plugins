@@ -1,10 +1,10 @@
 #!name=番茄小说去广告完全版
-#!desc=去除番茄小说全部广告：开屏、Banner、阅读章节插入广告、翻页插屏广告、激励视频、Feed广告
+#!desc=去除番茄小说全部广告：开屏、翻页插屏、Banner、章节内插入广告、激励视频、Feed广告
 #!author=Custom
 #!tag=去广告
 
 [Rule]
-# 穿山甲广告 SDK
+# ── 穿山甲广告 SDK 全家桶 ──────────────────────────────
 DOMAIN-SUFFIX,pangolin.snssdk.com,REJECT
 DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT
 DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT
@@ -12,29 +12,41 @@ DOMAIN-SUFFIX,adi.snssdk.com,REJECT
 DOMAIN-SUFFIX,ad.toutiao.com,REJECT
 DOMAIN-SUFFIX,ad.oceanengine.com,REJECT
 DOMAIN-SUFFIX,mssdk-boe.byted.org,REJECT
+DOMAIN-SUFFIX,tobapplog.snssdk.com,REJECT
+
+# ── 穿山甲广告素材 CDN（广告图片/视频资源加载域名）──────
+DOMAIN-SUFFIX,sf3-cdn-tos.pglstatp-toutiao.com,REJECT
+DOMAIN-SUFFIX,sf1-cdn-tos.pglstatp-toutiao.com,REJECT
+DOMAIN-SUFFIX,sf6-cdn-tos.pglstatp-toutiao.com,REJECT
+DOMAIN-SUFFIX,p3-ad.byteimg.com,REJECT
+DOMAIN-SUFFIX,p6-ad.byteimg.com,REJECT
+DOMAIN-SUFFIX,p9-ad.byteimg.com,REJECT
+DOMAIN-SUFFIX,p1-ad.byteimg.com,REJECT
+DOMAIN-SUFFIX,lf3-cdn-tos.bytescm.com,REJECT
+DOMAIN-SUFFIX,lf6-cdn-tos.bytescm.com,REJECT
+
+# ── 穿山甲广告竞价/请求接口 ──────────────────────────────
+DOMAIN-SUFFIX,alog.toutiao.com,REJECT
 DOMAIN-SUFFIX,log.snssdk.com,REJECT
 DOMAIN-SUFFIX,applog.snssdk.com,REJECT
+DOMAIN-SUFFIX,mon.snssdk.com,REJECT
+
+# ── 关键词兜底（穿山甲所有子域名）───────────────────────
+DOMAIN-KEYWORD,pglstatp-toutiao,REJECT
+DOMAIN-KEYWORD,pangolin-sdk,REJECT
 
 [Rewrite]
 # 开屏广告
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/app/ad/splash url reject-dict
 
-# 翻页插屏广告（核心新增）
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/insert url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/page url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/chapter url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/interstitial url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/full_screen url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/reader/ad url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/reader/ad url reject-dict
-
-# 激励视频广告
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/reward url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/reading/reader/ad/reward url reject-dict
-^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/free/unlock url reject-dict
-
-# 兜底：所有 /ad/ 路径
+# 翻页插屏广告（所有可能的命名）
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/ url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/reading/reader/ad url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/reader/ad url reject-dict
+
+# 激励视频 / 免费解锁
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/reward url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/free/unlock url reject-dict
 
 [Script]
 http-response ^https?://(novel\.snssdk\.com/api/novel/book/reader/full|[^/]+\.fqnovel\.com/reading/reader/full) script-path=https://raw.githubusercontent.com/whlvi/loon-plugins/main/FanQie_all_in_one.js,requires-body=true,timeout=15,tag=番茄_章节去广告
