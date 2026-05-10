@@ -54,6 +54,10 @@ DOMAIN-KEYWORD,pglstatp-toutiao,REJECT
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/reward url reject-dict
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/free/unlock url reject-dict
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/reader/banner url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/banner url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/float url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/tip url reject-dict
+^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/bottom url reject-dict
 
 [Script]
 http-response ^https?://(novel\.snssdk\.com/api/novel/book/reader/full|[^/]+\.fqnovel\.com/reading/reader/full) script-path=https://raw.githubusercontent.com/whlvi/loon-plugins/main/FanQie_all_in_one.js,requires-body=true,timeout=15,tag=番茄_章节去广告
