@@ -21,6 +21,7 @@ DOMAIN-KEYWORD,vas-lf,REJECT
 
 # ── 广告追踪上报 ─────────────────────────────────────────
 DOMAIN-SUFFIX,ecomuser.snssdk.com,REJECT
+DOMAIN-SUFFIX,i.snssdk.com,REJECT
 DOMAIN-KEYWORD,pangolin,REJECT
 DOMAIN-KEYWORD,pangle,REJECT
 
