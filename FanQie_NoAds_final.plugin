@@ -13,39 +13,46 @@ DOMAIN-SUFFIX,ad.toutiao.com,REJECT
 DOMAIN-SUFFIX,ad.oceanengine.com,REJECT
 DOMAIN-SUFFIX,mssdk-boe.byted.org,REJECT
 DOMAIN-SUFFIX,frontier-aweme.snssdk.com,REJECT
-DOMAIN-KEYWORD,pangolin-sdk,REJECT
+
+# ── 核心新增：字节 VAS 广告竞价系统（请求记录精准定位）──
+DOMAIN-SUFFIX,vas.snssdk.com,REJECT
+DOMAIN-SUFFIX,vas-lf-x.snssdk.com,REJECT
+DOMAIN-KEYWORD,vas-lf,REJECT
+
+# ── 广告追踪上报 ─────────────────────────────────────────
+DOMAIN-SUFFIX,ecomuser.snssdk.com,REJECT
+DOMAIN-KEYWORD,pangolin,REJECT
 DOMAIN-KEYWORD,pangle,REJECT
 
-# ── 番茄广告配置触发域名（请求记录精准定位）─────────────
-# mon*-misc-lf.fqnovel.com 系列（广告开关配置，高频请求）
+# ── 广告跳转落地页 ───────────────────────────────────────
+DOMAIN-SUFFIX,open.douyin.com,REJECT
+DOMAIN-SUFFIX,dig.bdurl.net,REJECT
+
+# ── 番茄广告配置/触发域名 ────────────────────────────────
 DOMAIN-KEYWORD,misc-lf.fqnovel,REJECT
-# frontier*-toutiao-lf.fqnovel.com（头条广告请求接口）
 DOMAIN-KEYWORD,toutiao-lf.fqnovel,REJECT
-
-# ── 插屏广告视频素材（2MB 视频就从这里来）────────────────
-DOMAIN-SUFFIX,fqnovelvod.com,REJECT
-
-# ── 广告曝光上报（含 QUIC）──────────────────────────────
 DOMAIN-KEYWORD,applog-lf.fqnovel,REJECT
 DOMAIN-KEYWORD,rtlog,REJECT
 
-# ── 穿山甲广告素材 CDN ────────────────────────────────────
-DOMAIN-KEYWORD,pglstatp-toutiao,REJECT
+# ── 插屏广告视频素材域名 ─────────────────────────────────
+DOMAIN-SUFFIX,fqnovelvod.com,REJECT
+
+# ── 广告图片素材 CDN ─────────────────────────────────────
 DOMAIN-SUFFIX,p3-ad.byteimg.com,REJECT
 DOMAIN-SUFFIX,p6-ad.byteimg.com,REJECT
 DOMAIN-SUFFIX,p9-ad.byteimg.com,REJECT
 DOMAIN-SUFFIX,p1-ad.byteimg.com,REJECT
+DOMAIN-SUFFIX,p6-novel.byteimg.com,REJECT
+DOMAIN-SUFFIX,p3-novel.byteimg.com,REJECT
+DOMAIN-SUFFIX,p9-novel.byteimg.com,REJECT
+DOMAIN-KEYWORD,pglstatp-toutiao,REJECT
 
 [Rewrite]
-# 开屏广告
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/app/ad/splash url reject-dict
-# 所有广告接口
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/ url reject-dict
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/reading/reader/ad url reject-dict
-# 激励视频 / 免费解锁
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/ad/reward url reject-dict
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/free/unlock url reject-dict
-# Banner 广告
 ^https?://(novel\.snssdk\.com|[^/]+\.fqnovel\.com)/api/novel/book/reader/banner url reject-dict
 
 [Script]
