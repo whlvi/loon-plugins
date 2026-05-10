@@ -27,6 +27,11 @@ DOMAIN-KEYWORD,pangle,REJECT
 
 # ── 广告跳转落地页 ───────────────────────────────────────
 DOMAIN-SUFFIX,open.douyin.com,REJECT
+DOMAIN-SUFFIX,im-open.douyin.com,REJECT
+DOMAIN-SUFFIX,ecombdapi.com,REJECT
+DOMAIN-SUFFIX,ecombdimg.com,REJECT
+DOMAIN-SUFFIX,douyinpic.com,REJECT
+DOMAIN-SUFFIX,bytescm.com,REJECT
 DOMAIN-SUFFIX,dig.bdurl.net,REJECT
 
 # ── 番茄广告配置/触发域名 ────────────────────────────────
